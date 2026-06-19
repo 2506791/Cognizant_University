@@ -1,0 +1,204 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognizant University - Portal Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #0d1b2a;
+            --accent: #800020;
+            --gold: #daa520;
+            --text-dark: #ffffff;
+            --text-muted: #cbd5e1;
+            --error: #f87171;
+            --error-bg: rgba(185, 28, 28, 0.25);
+            --radius: 6px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(rgba(13, 27, 42, 0.8), rgba(5, 11, 17, 0.9)), 
+                        url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 2.5rem 1.5rem; 
+        }
+        
+        .hidden { display: none !important; }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(18px) saturate(110%);
+            -webkit-backdrop-filter: blur(18px) saturate(110%);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem 2.25rem;
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: 4px solid var(--accent);
+            color: #ffffff;
+        }
+
+        .header { text-align: center; margin-bottom: 1.75rem; }
+        .logo { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 700; font-size: 1.2rem; color: #ffffff; margin-bottom: 0.5rem; }
+        .logo i { color: var(--gold); }
+        .header h1 { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.25rem; }
+        .header p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .form-group { margin-bottom: 1.15rem; }
+        label { font-size: 0.7rem; font-weight: 700; color: #ffffff; text-transform: uppercase; display: block; margin-bottom: 0.4rem; letter-spacing: 0.03em; }
+        
+        .form-input { 
+            width: 100%; 
+            padding: 0.75rem 1rem; 
+            font-size: 0.875rem; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            border-radius: var(--radius); 
+            outline: none; 
+            transition: all 0.2s; 
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+        }
+        .form-input::placeholder { color: rgba(255, 255, 255, 0.35); }
+        .form-input:focus { 
+            border-color: var(--gold); 
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.15); 
+        }
+
+        .btn-submit { 
+            width: 100%; 
+            background-color: var(--primary); 
+            color: #ffffff; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.85rem; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            border-radius: var(--radius); 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.5rem; 
+            transition: all 0.2s; 
+            margin-top: 1.5rem;
+        }
+        .btn-submit:hover { background-color: var(--accent); transform: translateY(-1px); }
+
+        .form-group.error .form-input { border-color: var(--error); background-color: rgba(185, 28, 28, 0.15); }
+        .field-error { color: var(--error); font-size: 0.75rem; margin-top: 0.35rem; display: flex; align-items: center; gap: 0.25rem; }
+
+        .login-prompt { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted); }
+        .login-link { color: var(--gold); text-decoration: none; font-weight: 600; margin-left: 0.25rem; }
+        .login-link:hover { text-decoration: underline; }
+
+        .success-layout { text-align: center; padding: 1.5rem 0; }
+        .success-badge { width: 56px; height: 56px; background-color: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #4ade80; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <div id="register-view">
+            <div class="header">
+                <div class="logo">
+                    <i data-lucide="user-plus"></i>
+                    <span>Cognizant University</span>
+                </div>
+                <h1>Create Account</h1>
+                <p>Register your institutional credentials</p>
+            </div>
+
+            <form id="registration-form" novalidate onsubmit="processRegistration(event)">
+                <div class="form-group" id="name-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" class="form-input" placeholder="John Doe" oninput="resetState('name-group')">
+                    <div id="name-error" class="field-error hidden"></div>
+                </div>
+
+                <div class="form-group" id="email-group">
+                    <label for="email">Institutional Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="johndoe@cognizant.edu" oninput="resetState('email-group')">
+                    <div id="email-error" class="field-error hidden"></div>
+                </div>
+
+                <div class="form-group" id="pass-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" oninput="resetState('pass-group')">
+                    <div id="pass-error" class="field-error hidden"></div>
+                </div>
+
+                <div class="form-group" id="confirm-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" class="form-input" placeholder="••••••••" oninput="resetState('confirm-group')">
+                    <div id="confirm-error" class="field-error hidden"></div>
+                </div>
+
+                <button type="submit" class="btn-submit">Complete Registration <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i></button>
+            </form>
+
+            <div class="login-prompt">
+                Already registered? <a href="student-login.html" class="login-link">Sign In here</a>
+            </div>
+        </div>
+
+        <div id="success-view" class="success-layout hidden">
+            <div class="success-badge"><i data-lucide="shield-check" style="width: 28px; height: 28px;"></i></div>
+            <h2>Registration Complete</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem; margin-bottom: 1.5rem;">Your account system node has been provisioned successfully.</p>
+            <a href="student-login.html" class="btn-submit" style="text-decoration: none;">Proceed to Student Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => { lucide.createIcons(); });
+
+        function resetState(groupId) {
+            const group = document.getElementById(groupId);
+            group.classList.remove('error');
+            group.querySelector('.field-error').classList.add('hidden');
+        }
+
+        function reportAnomaly(groupId, errorId, msg) {
+            const group = document.getElementById(groupId);
+            const errorText = document.getElementById(errorId);
+            group.classList.add('error');
+            errorText.innerHTML = `<i data-lucide="info" style='width:12px; height:12px;'></i> ${msg}`;
+            errorText.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function processRegistration(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirm-password').value;
+            
+            let isValid = true;
+
+            if (!name) { reportAnomaly('name-group', 'name-error', 'Full name is required.'); isValid = false; }
+            if (!email || !email.includes('@')) { reportAnomaly('email-group', 'email-error', 'Enter a valid institutional email.'); isValid = false; }
+            if (pass.length < 6) { reportAnomaly('pass-group', 'pass-error', 'Password must be at least 6 characters.'); isValid = false; }
+            if (pass !== confirmPass) { reportAnomaly('confirm-group', 'confirm-error', 'Passwords do not match.'); isValid = false; }
+
+            if (isValid) {
+                document.getElementById('register-view').classList.add('hidden');
+                document.getElementById('success-view').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
